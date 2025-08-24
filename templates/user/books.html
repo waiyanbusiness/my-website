@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Books - E-Library System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-book-open me-2"></i>Browse Books
+        </h1>
+    </div>
+</div>
+
+<!-- Search and Filter Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="GET" action="{{ url_for('books') }}">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <input type="text" class="form-control" name="query" 
+                                   placeholder="Search by title or author..." 
+                                   value="{{ query }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <select class="form-select" name="category">
+                                <option value="0">All Categories</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}" 
+                                        {% if category.id == selected_category %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-1"></i>Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Section -->
+<div class="row">
+    <div class="col-12">
+        {% if books.items %}
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <p class="text-muted mb-0">
+                Showing {{ books.items|length }} of {{ books.total }} books
+                {% if query %} for "{{ query }}"{% endif %}
+                {% if selected_category %} in {{ categories|selectattr('id', 'equalto', selected_category)|first.name }}{% endif %}
+            </p>
+        </div>
+        
+        <div class="row">
+            {% for book in books.items %}
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ book.title }}</h6>
+                        <p class="card-text text-muted small">
+                            <i class="fas fa-user me-1"></i>{{ book.author }}
+                        </p>
+                        <p class="card-text">
+                            <span class="badge bg-secondary">{{ book.category.name }}</span>
+                        </p>
+                        {% if book.description %}
+                        <p class="card-text small">{{ book.description[:80] }}{% if book.description|length > 80 %}...{% endif %}</p>
+                        {% endif %}
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>{{ book.uploaded_at.strftime('%m/%d/%Y') }}
+                            </small>
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('download_book', book_id=book.id) }}" class="btn btn-primary btn-sm w-100">
+                            <i class="fas fa-download me-1"></i>Download
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-secondary btn-sm w-100">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login to Download
+                        </a>
+                        {% endif %}
+                        <div class="text-center mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-download me-1"></i>{{ book.download_count }} downloads
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if books.pages > 1 %}
+        <nav aria-label="Book pagination">
+            <ul class="pagination justify-content-center">
+                {% if books.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('books', page=books.prev_num, query=query, category=selected_category) }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% for page_num in books.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num != books.page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('books', page=page_num, query=query, category=selected_category) }}">{{ page_num }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">…</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if books.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('books', page=books.next_num, query=query, category=selected_category) }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">No books found</h4>
+            {% if query or selected_category %}
+            <p class="text-muted">Try adjusting your search criteria or browse all books.</p>
+            <a href="{{ url_for('books') }}" class="btn btn-primary">
+                <i class="fas fa-book-open me-2"></i>View All Books
+            </a>
+            {% else %}
+            <p class="text-muted">The library is empty. Check back soon for new books!</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

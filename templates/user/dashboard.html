@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - E-Library System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-tachometer-alt me-2"></i>Welcome, {{ current_user.full_name }}!
+        </h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ user_downloads }}</h4>
+                        <p class="card-text">Books Downloaded</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-download fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">Browse</h4>
+                        <p class="card-text">Discover Books</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-search fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('books') }}" class="text-white text-decoration-none">
+                    Browse Library <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">Profile</h4>
+                        <p class="card-text">Manage Account</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-user fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('profile') }}" class="text-white text-decoration-none">
+                    Edit Profile <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if recent_books %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-clock me-2"></i>Recently Added Books
+        </h2>
+        <div class="row">
+            {% for book in recent_books %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <p class="card-text text-muted">
+                            <i class="fas fa-user me-1"></i>{{ book.author }}
+                        </p>
+                        <p class="card-text text-muted">
+                            <i class="fas fa-tag me-1"></i>{{ book.category.name }}
+                        </p>
+                        {% if book.description %}
+                        <p class="card-text">{{ book.description[:100] }}{% if book.description|length > 100 %}...{% endif %}</p>
+                        {% endif %}
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <i class="fas fa-upload me-1"></i>{{ book.uploaded_at.strftime('%B %d, %Y') }}
+                            </small>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('download_book', book_id=book.id) }}" class="btn btn-primary">
+                            <i class="fas fa-download me-1"></i>Download
+                        </a>
+                        <small class="text-muted ms-2">
+                            <i class="fas fa-download me-1"></i>{{ book.download_count }} downloads
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('books') }}" class="btn btn-outline-primary">
+                <i class="fas fa-book-open me-2"></i>View All Books
+            </a>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No books available yet</h4>
+                <p class="text-muted">The library is being built. Check back soon for new books!</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

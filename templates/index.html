@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - E-Library System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="hero-section bg-primary text-white rounded p-5 mb-5">
+            <div class="text-center">
+                <h1 class="display-4 mb-4">
+                    <i class="fas fa-book-reader me-3"></i>Welcome to E-Library
+                </h1>
+                <p class="lead mb-4">Discover, read, and download thousands of books from our comprehensive digital library</p>
+                {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('login') }}" class="btn btn-light btn-lg me-3">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+                {% endif %}
+                <a href="{{ url_for('books') }}" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-search me-2"></i>Browse Books
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if recent_books %}
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-clock me-2"></i>Recently Added Books
+        </h2>
+        <div class="row">
+            {% for book in recent_books %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <p class="card-text text-muted">
+                            <i class="fas fa-user me-1"></i>{{ book.author }}
+                        </p>
+                        <p class="card-text text-muted">
+                            <i class="fas fa-tag me-1"></i>{{ book.category.name }}
+                        </p>
+                        {% if book.description %}
+                        <p class="card-text">{{ book.description[:100] }}{% if book.description|length > 100 %}...{% endif %}</p>
+                        {% endif %}
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <i class="fas fa-upload me-1"></i>Uploaded {{ book.uploaded_at.strftime('%B %d, %Y') }}
+                            </small>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('download_book', book_id=book.id) }}" class="btn btn-primary">
+                            <i class="fas fa-download me-1"></i>Download
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-secondary">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login to Download
+                        </a>
+                        {% endif %}
+                        <small class="text-muted ms-2">
+                            <i class="fas fa-download me-1"></i>{{ book.download_count }} downloads
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if categories %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-list me-2"></i>Browse by Category
+        </h2>
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-3 col-sm-6 mb-3">
+                <a href="{{ url_for('books', category=category.id) }}" class="text-decoration-none">
+                    <div class="card bg-secondary text-center h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ category.name }}</h5>
+                            <p class="card-text text-muted">{{ category.books|length }} books</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if not current_user.is_authenticated %}
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card bg-secondary">
+            <div class="card-body text-center">
+                <h3>Ready to start reading?</h3>
+                <p class="mb-4">Join our community of readers and get access to our complete library</p>
+                <a href="{{ url_for('login') }}" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
