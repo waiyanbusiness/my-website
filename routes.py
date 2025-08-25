@@ -91,7 +91,13 @@ def admin_add_book():
     if form.validate_on_submit():
         file = form.file.data
         filename = secure_filename(file.filename)
-        file_path = os.path.join('uploads', filename)
+        
+        # Ensure uploads directory exists
+        upload_dir = os.path.join(os.getcwd(), 'uploads')
+        os.makedirs(upload_dir, exist_ok=True)
+        
+        # Create full file path
+        file_path = os.path.join(upload_dir, filename)
         file.save(file_path)
         
         book = Book(
@@ -143,10 +149,16 @@ def admin_delete_book(id):
     
     # Delete file from filesystem
     try:
-        if os.path.exists(book.file_path):
-            os.remove(book.file_path)
+        # Ensure the file path is absolute
+        if not os.path.isabs(book.file_path):
+            file_path = os.path.join(os.getcwd(), book.file_path)
+        else:
+            file_path = book.file_path
+            
+        if os.path.exists(file_path):
+            os.remove(file_path)
     except Exception as e:
-        current_app.logger.error(f"Error deleting file {book.file_path}: {e}")
+        current_app.logger.error(f"Error deleting file {file_path}: {e}")
     
     db.session.delete(book)
     db.session.commit()
@@ -311,7 +323,13 @@ def download_book(book_id):
     db.session.commit()
     
     try:
-        return send_file(book.file_path, as_attachment=True, download_name=book.filename)
+        # Ensure the file path is absolute
+        if not os.path.isabs(book.file_path):
+            file_path = os.path.join(os.getcwd(), book.file_path)
+        else:
+            file_path = book.file_path
+            
+        return send_file(file_path, as_attachment=True, download_name=book.filename)
     except FileNotFoundError:
         flash('File not found. Please contact administrator.', 'danger')
         return redirect(url_for('books'))
