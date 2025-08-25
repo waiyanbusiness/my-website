@@ -68,16 +68,42 @@
                         {% endif %}
                     </div>
                     
+                    <div class="mb-3">
+                        {{ form.cover.label(class="form-label") }}
+                        {{ form.cover(class="form-control" + (" is-invalid" if form.cover.errors else "")) }}
+                        {% if form.cover.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.cover.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">
+                            Optional: Upload new cover image (JPG, JPEG, PNG, GIF)
+                        </div>
+                    </div>
+                    
                     <div class="mb-4">
                         <div class="card bg-dark">
                             <div class="card-body">
-                                <h6 class="card-title">Current File Information</h6>
-                                <p class="card-text">
-                                    <strong>Filename:</strong> {{ book.filename }}<br>
-                                    <strong>Size:</strong> {{ "%.2f"|format(book.file_size / 1024 / 1024) }} MB<br>
-                                    <strong>Uploaded:</strong> {{ book.uploaded_at.strftime('%Y-%m-%d %H:%M') }}
-                                </p>
-                                <small class="text-muted">Note: To change the file, delete and re-upload the book.</small>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h6 class="card-title">Current File Information</h6>
+                                        <p class="card-text">
+                                            <strong>Filename:</strong> {{ book.filename }}<br>
+                                            <strong>Size:</strong> {{ "%.2f"|format(book.file_size / 1024 / 1024) }} MB<br>
+                                            <strong>Uploaded:</strong> {{ book.uploaded_at.strftime('%Y-%m-%d %H:%M') }}
+                                        </p>
+                                        <small class="text-muted">Note: To change the file, delete and re-upload the book.</small>
+                                    </div>
+                                    {% if book.cover_image %}
+                                    <div class="col-md-4">
+                                        <h6 class="card-title">Current Cover</h6>
+                                        <img src="{{ url_for('cover_image', filename=book.cover_image) }}" 
+                                             class="img-fluid rounded" 
+                                             style="max-height: 150px;"
+                                             alt="Book Cover">
+                                    </div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>

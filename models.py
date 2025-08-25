@@ -53,6 +53,8 @@ class Book(db.Model):
     filename = db.Column(db.String(255), nullable=False)
     file_path = db.Column(db.String(500), nullable=False)
     file_size = db.Column(db.Integer)  # in bytes
+    cover_image = db.Column(db.String(255))  # cover image filename
+    cover_path = db.Column(db.String(500))   # full path to cover image
     uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Foreign keys

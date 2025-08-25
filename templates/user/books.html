@@ -62,6 +62,17 @@
             {% for book in books.items %}
             <div class="col-md-4 col-lg-3 mb-4">
                 <div class="card h-100">
+                    {% if book.cover_image %}
+                    <img src="{{ url_for('cover_image', filename=book.cover_image) }}" 
+                         class="card-img-top" 
+                         style="height: 200px; object-fit: cover;"
+                         alt="{{ book.title }}">
+                    {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" 
+                         style="height: 200px;">
+                        <i class="fas fa-book fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
                     <div class="card-body">
                         <h6 class="card-title">{{ book.title }}</h6>
                         <p class="card-text text-muted small">

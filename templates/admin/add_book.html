@@ -68,6 +68,19 @@
                         {% endif %}
                     </div>
                     
+                    <div class="mb-3">
+                        {{ form.cover.label(class="form-label") }}
+                        {{ form.cover(class="form-control" + (" is-invalid" if form.cover.errors else "")) }}
+                        {% if form.cover.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.cover.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">
+                            Optional: JPG, JPEG, PNG, GIF images (Max: 5MB)
+                        </div>
+                    </div>
+                    
                     <div class="mb-4">
                         {{ form.file.label(class="form-label") }}
                         {{ form.file(class="form-control" + (" is-invalid" if form.file.errors else "")) }}

@@ -57,6 +57,10 @@ class BookForm(FlaskForm):
     author = StringField('Author Name', validators=[DataRequired(), Length(min=1, max=200)])
     description = TextAreaField('Description')
     category_id = SelectField('Category', coerce=int, validators=[DataRequired()])
+    cover = FileField('Book Cover Image', validators=[
+        FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 
+                   'Only JPG, JPEG, PNG, and GIF images are allowed!')
+    ])
     file = FileField('Book File', validators=[
         FileRequired(),
         FileAllowed(['pdf', 'epub', 'mobi', 'txt', 'doc', 'docx'], 
@@ -73,6 +77,10 @@ class EditBookForm(FlaskForm):
     author = StringField('Author Name', validators=[DataRequired(), Length(min=1, max=200)])
     description = TextAreaField('Description')
     category_id = SelectField('Category', coerce=int, validators=[DataRequired()])
+    cover = FileField('New Cover Image', validators=[
+        FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 
+                   'Only JPG, JPEG, PNG, and GIF images are allowed!')
+    ])
     submit = SubmitField('Update Book')
     
     def __init__(self, *args, **kwargs):

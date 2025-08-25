@@ -100,6 +100,22 @@ def admin_add_book():
         file_path = os.path.join(upload_dir, filename)
         file.save(file_path)
         
+        # Handle cover image upload
+        cover_image = None
+        cover_path = None
+        if form.cover.data:
+            cover_file = form.cover.data
+            cover_filename = secure_filename(cover_file.filename)
+            
+            # Ensure covers directory exists
+            covers_dir = os.path.join(os.getcwd(), 'covers')
+            os.makedirs(covers_dir, exist_ok=True)
+            
+            # Create full cover path
+            cover_path = os.path.join(covers_dir, cover_filename)
+            cover_file.save(cover_path)
+            cover_image = cover_filename
+        
         book = Book(
             title=form.title.data,
             author=form.author.data,
@@ -108,6 +124,8 @@ def admin_add_book():
             filename=filename,
             file_path=file_path,
             file_size=os.path.getsize(file_path),
+            cover_image=cover_image,
+            cover_path=cover_path,
             uploaded_by=current_user.id
         )
         db.session.add(book)
@@ -132,6 +150,30 @@ def admin_edit_book(id):
         book.author = form.author.data
         book.description = form.description.data
         book.category_id = form.category_id.data
+        
+        # Handle cover image update
+        if form.cover.data:
+            # Delete old cover if exists
+            if book.cover_path and os.path.exists(book.cover_path):
+                try:
+                    os.remove(book.cover_path)
+                except Exception as e:
+                    current_app.logger.error(f"Error deleting old cover {book.cover_path}: {e}")
+            
+            cover_file = form.cover.data
+            cover_filename = secure_filename(cover_file.filename)
+            
+            # Ensure covers directory exists
+            covers_dir = os.path.join(os.getcwd(), 'covers')
+            os.makedirs(covers_dir, exist_ok=True)
+            
+            # Create full cover path
+            cover_path = os.path.join(covers_dir, cover_filename)
+            cover_file.save(cover_path)
+            
+            book.cover_image = cover_filename
+            book.cover_path = cover_path
+        
         db.session.commit()
         flash('Book updated successfully!', 'success')
         return redirect(url_for('admin_books'))
@@ -157,8 +199,12 @@ def admin_delete_book(id):
             
         if os.path.exists(file_path):
             os.remove(file_path)
+            
+        # Delete cover image if exists
+        if book.cover_path and os.path.exists(book.cover_path):
+            os.remove(book.cover_path)
     except Exception as e:
-        current_app.logger.error(f"Error deleting file {file_path}: {e}")
+        current_app.logger.error(f"Error deleting files: {e}")
     
     db.session.delete(book)
     db.session.commit()
@@ -368,5 +414,11 @@ def profile():
                          form=form, 
                          password_form=password_form,
                          user_downloads=user_downloads)
+
+# Route to serve cover images
+@app.route('/covers/<filename>')
+def cover_image(filename):
+    covers_dir = os.path.join(os.getcwd(), 'covers')
+    return send_file(os.path.join(covers_dir, filename))
 
 # Initialize default categories (moved to app.py)
