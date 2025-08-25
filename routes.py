@@ -236,6 +236,25 @@ def admin_categories():
     categories = Category.query.order_by(Category.name).all()
     return render_template('admin/categories.html', form=form, categories=categories)
 
+@app.route('/admin/categories/delete/<int:id>')
+@login_required
+def admin_delete_category(id):
+    if not current_user.is_admin:
+        flash('Access denied. Admin privileges required.', 'danger')
+        return redirect(url_for('index'))
+    
+    category = Category.query.get_or_404(id)
+    
+    # Check if category has books
+    if len(category.books) > 0:
+        flash('Cannot delete category that contains books. Please move or delete the books first.', 'danger')
+        return redirect(url_for('admin_categories'))
+    
+    db.session.delete(category)
+    db.session.commit()
+    flash('Category deleted successfully!', 'success')
+    return redirect(url_for('admin_categories'))
+
 # User Routes
 @app.route('/dashboard')
 @login_required

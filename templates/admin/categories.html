@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Categories - E-Library System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-tags me-2"></i>Manage Categories
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <!-- Add Category Form -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-plus me-2"></i>Add New Category
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else "")) }}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.name.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.description.label(class="form-label") }}
+                        {{ form.description(class="form-control", rows="3", placeholder="Optional description...") }}
+                        {% if form.description.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.description.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <!-- Categories List -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>Existing Categories
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if categories %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Books</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in categories %}
+                            <tr>
+                                <td>
+                                    <strong>{{ category.name }}</strong>
+                                </td>
+                                <td>
+                                    {% if category.description %}
+                                        {{ category.description[:100] }}{% if category.description|length > 100 %}...{% endif %}
+                                    {% else %}
+                                        <span class="text-muted">No description</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ category.books|length }}</span>
+                                </td>
+                                <td>{{ category.created_at.strftime('%Y-%m-%d') }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-outline-info" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#categoryModal{{ category.id }}">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        {% if category.books|length == 0 %}
+                                        <a href="{{ url_for('admin_delete_category', id=category.id) }}" 
+                                           class="btn btn-outline-danger"
+                                           onclick="return confirm('Are you sure you want to delete this category?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                        {% else %}
+                                        <button type="button" class="btn btn-outline-danger disabled" 
+                                                title="Cannot delete category with books">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <!-- Category Details Modal -->
+                            <div class="modal fade" id="categoryModal{{ category.id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Category Details: {{ category.name }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-4"><strong>Name:</strong></div>
+                                                <div class="col-8">{{ category.name }}</div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-4"><strong>Description:</strong></div>
+                                                <div class="col-8">{{ category.description or 'No description' }}</div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-4"><strong>Total Books:</strong></div>
+                                                <div class="col-8">{{ category.books|length }}</div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-4"><strong>Created:</strong></div>
+                                                <div class="col-8">{{ category.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+                                            </div>
+                                            
+                                            {% if category.books %}
+                                            <hr>
+                                            <h6>Books in this Category:</h6>
+                                            <div class="list-group list-group-flush">
+                                                {% for book in category.books[:10] %}
+                                                <div class="list-group-item">
+                                                    <div class="d-flex w-100 justify-content-between">
+                                                        <h6 class="mb-1">{{ book.title }}</h6>
+                                                        <small>{{ book.uploaded_at.strftime('%m/%d/%Y') }}</small>
+                                                    </div>
+                                                    <small>by {{ book.author }}</small>
+                                                </div>
+                                                {% endfor %}
+                                                {% if category.books|length > 10 %}
+                                                <div class="list-group-item text-center">
+                                                    <small class="text-muted">... and {{ category.books|length - 10 }} more books</small>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No categories found</h4>
+                    <p class="text-muted">Create your first category to organize books in the library.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
