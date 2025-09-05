@@ -87,6 +87,12 @@ class EditBookForm(FlaskForm):
         super(EditBookForm, self).__init__(*args, **kwargs)
         self.category_id.choices = [(c.id, c.name) for c in Category.query.order_by(Category.name).all()]
 
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('New Password', validators=[DataRequired(), Length(min=6)])
+    password2 = PasswordField('Confirm New Password', 
+                             validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
+
 class SearchForm(FlaskForm):
     query = StringField('Search books by title or author...', validators=[DataRequired()])
     category = SelectField('Category', coerce=int)

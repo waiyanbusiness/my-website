@@ -7,7 +7,7 @@ from sqlalchemy import or_
 from app import app, db
 from models import User, Book, Category, Download
 from forms import (LoginForm, UserForm, EditUserForm, ChangePasswordForm, 
-                  CategoryForm, BookForm, EditBookForm, SearchForm)
+                  CategoryForm, BookForm, EditBookForm, SearchForm, ResetPasswordForm)
 
 @app.route('/')
 def index():
@@ -243,6 +243,27 @@ def admin_add_user():
         return redirect(url_for('admin_users'))
     
     return render_template('admin/add_user.html', form=form)
+
+@app.route('/admin/users/reset-password/<int:id>', methods=['GET', 'POST'])
+@login_required
+def admin_reset_user_password(id):
+    if not current_user.is_admin:
+        flash('Access denied. Admin privileges required.', 'danger')
+        return redirect(url_for('index'))
+    
+    user = User.query.get_or_404(id)
+    if user.is_admin and user.id != current_user.id:
+        flash('Cannot reset password for other admin users.', 'danger')
+        return redirect(url_for('admin_users'))
+    
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash(f'Password reset successfully for user {user.username}!', 'success')
+        return redirect(url_for('admin_users'))
+    
+    return render_template('admin/reset_password.html', form=form, user=user)
 
 @app.route('/admin/users/delete/<int:id>')
 @login_required
