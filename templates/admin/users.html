@@ -62,8 +62,7 @@
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button type="button" class="btn btn-outline-info" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#userModal{{ user.id }}"
+                                                onclick="showUserDetails{{ user.id }}()"
                                                 title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </button>
@@ -82,58 +81,67 @@
                                 </td>
                             </tr>
                             
-                            <!-- User Details Modal -->
-                            <div class="modal" id="userModal{{ user.id }}" tabindex="-1" aria-labelledby="userModalLabel{{ user.id }}" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="userModalLabel{{ user.id }}">User Details: {{ user.full_name }}</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <!-- User Details Custom Modal -->
+                            <div id="userModal{{ user.id }}" class="custom-modal" style="display: none;">
+                                <div class="custom-modal-backdrop" onclick="hideUserDetails{{ user.id }}()"></div>
+                                <div class="custom-modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">User Details: {{ user.full_name }}</h5>
+                                        <button type="button" class="btn-close" onclick="hideUserDetails{{ user.id }}()" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-6"><strong>Username:</strong></div>
+                                            <div class="col-6">{{ user.username }}</div>
                                         </div>
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col-6"><strong>Username:</strong></div>
-                                                <div class="col-6">{{ user.username }}</div>
-                                            </div>
-                                            <div class="row mt-2">
-                                                <div class="col-6"><strong>Email:</strong></div>
-                                                <div class="col-6">{{ user.email }}</div>
-                                            </div>
-                                            <div class="row mt-2">
-                                                <div class="col-6"><strong>Full Name:</strong></div>
-                                                <div class="col-6">{{ user.full_name }}</div>
-                                            </div>
-                                            <div class="row mt-2">
-                                                <div class="col-6"><strong>Created:</strong></div>
-                                                <div class="col-6">{{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
-                                            </div>
-                                            <div class="row mt-2">
-                                                <div class="col-6"><strong>Total Downloads:</strong></div>
-                                                <div class="col-6">{{ user.downloads|length }}</div>
-                                            </div>
-                                            
-                                            {% if user.downloads %}
-                                            <hr>
-                                            <h6>Recent Downloads:</h6>
-                                            <div class="list-group list-group-flush">
-                                                {% for download in user.downloads[:5] %}
-                                                <div class="list-group-item">
-                                                    <div class="d-flex w-100 justify-content-between">
-                                                        <h6 class="mb-1">{{ download.book.title }}</h6>
-                                                        <small>{{ download.downloaded_at.strftime('%m/%d/%Y') }}</small>
-                                                    </div>
-                                                    <small>by {{ download.book.author }}</small>
+                                        <div class="row mt-2">
+                                            <div class="col-6"><strong>Email:</strong></div>
+                                            <div class="col-6">{{ user.email }}</div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-6"><strong>Full Name:</strong></div>
+                                            <div class="col-6">{{ user.full_name }}</div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-6"><strong>Created:</strong></div>
+                                            <div class="col-6">{{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-6"><strong>Total Downloads:</strong></div>
+                                            <div class="col-6">{{ user.downloads|length }}</div>
+                                        </div>
+                                        
+                                        {% if user.downloads %}
+                                        <hr>
+                                        <h6>Recent Downloads:</h6>
+                                        <div class="list-group list-group-flush">
+                                            {% for download in user.downloads[:5] %}
+                                            <div class="list-group-item">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h6 class="mb-1">{{ download.book.title }}</h6>
+                                                    <small>{{ download.downloaded_at.strftime('%m/%d/%Y') }}</small>
                                                 </div>
-                                                {% endfor %}
+                                                <small>by {{ download.book.author }}</small>
                                             </div>
-                                            {% endif %}
+                                            {% endfor %}
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" onclick="hideUserDetails{{ user.id }}()">Close</button>
                                     </div>
                                 </div>
                             </div>
+
+                            <script>
+                            function showUserDetails{{ user.id }}() {
+                                document.getElementById('userModal{{ user.id }}').style.display = 'block';
+                            }
+                            
+                            function hideUserDetails{{ user.id }}() {
+                                document.getElementById('userModal{{ user.id }}').style.display = 'none';
+                            }
+                            </script>
                             {% endfor %}
                         </tbody>
                     </table>
