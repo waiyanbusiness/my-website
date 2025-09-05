@@ -161,6 +161,12 @@
     pointer-events: none;
 }
 
+/* Reduce animation for small action buttons */
+.btn-group-sm .btn:hover {
+    transform: none;
+    opacity: 0.8;
+}
+
 /* Custom scrollbar for webkit browsers */
 ::-webkit-scrollbar {
     width: 8px;
