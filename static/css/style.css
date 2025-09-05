@@ -167,6 +167,19 @@
     opacity: 0.8;
 }
 
+/* Fix modal blinking/flickering */
+.modal.fade .modal-dialog {
+    transition: transform 0.2s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+.modal-backdrop {
+    transition: opacity 0.15s linear;
+}
+
 /* Custom scrollbar for webkit browsers */
 ::-webkit-scrollbar {
     width: 8px;
