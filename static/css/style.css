@@ -204,6 +204,34 @@
     padding: 4px;
 }
 
+/* Noble Mount College User Pages Background */
+body.user-page {
+    background: linear-gradient(135deg, var(--nmc-navy) 0%, var(--nmc-navy-light) 100%);
+    min-height: 100vh;
+}
+
+/* User page content styling */
+.user-page .container {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.user-page h1,
+.user-page h2,
+.user-page h3,
+.user-page h4,
+.user-page h5,
+.user-page h6 {
+    color: white;
+}
+
+.user-page .text-muted {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
 [data-bs-theme="dark"] .card {
     background-color: var(--bs-dark);
     border-color: var(--bs-border-color);
