@@ -172,9 +172,10 @@
     --nmc-gold-light: #f4d03f;
 }
 
-/* Dark theme specific adjustments */
-[data-bs-theme="dark"] .hero-section {
+/* Light theme specific adjustments */
+.hero-section {
     background: linear-gradient(135deg, var(--nmc-navy) 0%, var(--nmc-navy-light) 100%);
+    color: white;
 }
 
 /* Noble Mount College Navbar Styling */
@@ -195,31 +196,23 @@
     color: var(--nmc-gold) !important;
 }
 
-/* Logo styling - remove white background more gently */
+/* Logo styling for light theme */
 .navbar-brand img,
 .hero-logo,
 .login-logo {
     background: transparent;
-    mix-blend-mode: multiply;
 }
 
-/* Make logo darker elements visible on dark backgrounds */
-.hero-logo,
-.login-logo {
-    filter: brightness(1.2) contrast(1.1);
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
-    padding: 8px;
+/* Light theme card styling */
+.card {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
-[data-bs-theme="dark"] .card {
-    background-color: var(--bs-dark);
-    border-color: var(--bs-border-color);
-}
-
-[data-bs-theme="dark"] .list-group-item {
-    background-color: transparent;
-    border-color: var(--bs-border-color);
+.list-group-item {
+    background-color: white;
+    border-color: #dee2e6;
 }
 
 /* Animation for loading states */

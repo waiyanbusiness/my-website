@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--nmc-navy) !important;">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
                 <img src="{{ url_for('static', filename='images/nobel-mount-logo.jpg') }}" alt="Noble Mount College" height="40" class="me-2">
@@ -90,10 +90,10 @@
         </div>
     </main>
 
-    <footer class="bg-dark text-light py-4 mt-5">
+    <footer class="py-4 mt-5" style="background-color: var(--nmc-navy); color: white;">
         <div class="container text-center">
             <p>&copy; 2025 Noble Mount College Digital Library. All rights reserved.</p>
-            <small class="text-muted">Empowering minds through knowledge and learning</small>
+            <small style="color: rgba(255, 255, 255, 0.7);">Empowering minds through knowledge and learning</small>
         </div>
     </footer>
 
