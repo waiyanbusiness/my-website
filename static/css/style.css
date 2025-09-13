@@ -163,16 +163,25 @@
     }
 }
 
-/* Noble Mount College Theme - Navy Blue Color Scheme */
+/* Noble Mount College Theme - Blue Gray Color Scheme */
 :root {
-    --nmc-navy: #2c3e50;
-    --nmc-navy-light: #34495e;
-    --nmc-navy-dark: #1a252f;
+    --nmc-navy: #415a77;
+    --nmc-navy-light: #778da9;
+    --nmc-navy-dark: #1b263b;
     --nmc-gold: #f39c12;
     --nmc-gold-light: #f4d03f;
+    
+    /* Map Bootstrap tokens to NMC colors for consistent theming */
+    --bs-primary: var(--nmc-navy);
+    --bs-primary-rgb: 65, 90, 119;
 }
 
-/* Dark theme specific adjustments */
+/* Hero section consistent theming */
+.hero-section {
+    background: linear-gradient(135deg, var(--nmc-navy) 0%, var(--nmc-navy-light) 100%);
+    color: white;
+}
+
 [data-bs-theme="dark"] .hero-section {
     background: linear-gradient(135deg, var(--nmc-navy) 0%, var(--nmc-navy-light) 100%);
 }
@@ -206,7 +215,7 @@
 
 /* Noble Mount College User Pages Background */
 body.user-page {
-    background: linear-gradient(135deg, var(--nmc-navy) 0%, var(--nmc-navy-light) 100%);
+    background: linear-gradient(135deg, var(--nmc-navy-dark) 0%, var(--nmc-navy) 100%);
     min-height: 100vh;
 }
 
@@ -230,6 +239,26 @@ body.user-page {
 
 .user-page .text-muted {
     color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Global card and component styling with NMC theme */
+.btn-primary {
+    background-color: var(--nmc-navy);
+    border-color: var(--nmc-navy);
+}
+
+.btn-primary:hover {
+    background-color: var(--nmc-navy-dark);
+    border-color: var(--nmc-navy-dark);
+}
+
+.page-link {
+    color: var(--nmc-navy);
+}
+
+.page-item.active .page-link {
+    background-color: var(--nmc-navy);
+    border-color: var(--nmc-navy);
 }
 
 [data-bs-theme="dark"] .card {
