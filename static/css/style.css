@@ -291,6 +291,36 @@ body.user-page {
     color: white !important;
 }
 
+/* Login page styling - ensure dark theme */
+.login-page .card {
+    background-color: var(--nmc-navy) !important;
+    color: white !important;
+    border-color: var(--nmc-navy-dark) !important;
+}
+
+/* Login page input fields with white borders - only when NOT invalid */
+.login-page .form-control:not(.is-invalid) {
+    border-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.login-page .form-control:not(.is-invalid):focus {
+    border-color: white;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+}
+
+/* Preserve error styling on login page */
+.login-page .form-control.is-invalid {
+    border-color: var(--bs-danger);
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.login-page .form-control.is-invalid:focus {
+    border-color: var(--bs-danger);
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
 /* Animation for loading states */
 .loading {
     opacity: 0.6;
