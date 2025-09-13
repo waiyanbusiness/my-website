@@ -195,6 +195,25 @@
     color: var(--nmc-gold) !important;
 }
 
+/* Remove white background from logo */
+.navbar-brand img,
+.hero-logo,
+.login-logo {
+    background: transparent;
+    mix-blend-mode: multiply;
+    filter: brightness(0) invert(1);
+}
+
+/* Special styling for logo in hero section */
+.hero-logo {
+    filter: brightness(0) invert(1) !important;
+}
+
+/* Logo in login page */
+.login-logo {
+    filter: brightness(0) invert(1) !important;
+}
+
 [data-bs-theme="dark"] .card {
     background-color: var(--bs-dark);
     border-color: var(--bs-border-color);
