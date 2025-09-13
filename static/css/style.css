@@ -163,17 +163,17 @@
     }
 }
 
-/* Noble Mount College Theme - Dark Blue Gray Color Scheme */
+/* Noble Mount College Theme - Dark Navy Color Scheme */
 :root {
-    --nmc-navy: #3a4f5c;
-    --nmc-navy-light: #4a6070;
-    --nmc-navy-dark: #2a3a45;
+    --nmc-navy: #1e2a3a;
+    --nmc-navy-light: #2c3e50;
+    --nmc-navy-dark: #151f2b;
     --nmc-gold: #f39c12;
     --nmc-gold-light: #f4d03f;
     
     /* Map Bootstrap tokens to NMC colors for consistent theming */
     --bs-primary: var(--nmc-navy);
-    --bs-primary-rgb: 58, 79, 92;
+    --bs-primary-rgb: 30, 42, 58;
 }
 
 /* Hero section consistent theming */
