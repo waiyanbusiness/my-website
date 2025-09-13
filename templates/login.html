@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Login - E-Library System{% endblock %}
+{% block title %}Login - Noble Mount College Digital Library{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
@@ -8,9 +8,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="text-center mb-4">
-                    <i class="fas fa-sign-in-alt fa-3x text-primary mb-3"></i>
-                    <h2>Login</h2>
-                    <p class="text-muted">Access your account</p>
+                    <img src="{{ url_for('static', filename='images/nobel-mount-logo.jpg') }}" alt="Noble Mount College" height="80" class="mb-3">
+                    <h2>Welcome Back</h2>
+                    <p class="text-muted">Noble Mount College Digital Library</p>
                 </div>
                 
                 <form method="POST">

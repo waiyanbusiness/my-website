@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}Welcome - E-Library System{% endblock %}
+{% block title %}Welcome - Noble Mount College Digital Library{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
         <div class="hero-section bg-primary text-white rounded p-5 mb-5">
             <div class="text-center">
-                <h1 class="display-4 mb-4">
-                    <i class="fas fa-book-reader me-3"></i>Welcome to E-Library
-                </h1>
-                <p class="lead mb-4">Discover, read, and download thousands of books from our comprehensive digital library</p>
+                <div class="d-flex justify-content-center align-items-center mb-4">
+                    <img src="{{ url_for('static', filename='images/nobel-mount-logo.jpg') }}" alt="Noble Mount College" height="100" class="me-4">
+                    <div class="text-start">
+                        <h1 class="display-4 mb-2">Noble Mount College</h1>
+                        <h2 class="h3">Digital Library</h2>
+                    </div>
+                </div>
+                <p class="lead mb-4">Excellence in Education, Knowledge for Life<br>Discover, read, and download thousands of books from our comprehensive academic collection</p>
                 {% if not current_user.is_authenticated %}
                 <a href="{{ url_for('login') }}" class="btn btn-light btn-lg me-3">
                     <i class="fas fa-sign-in-alt me-2"></i>Login
