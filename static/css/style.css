@@ -195,23 +195,21 @@
     color: var(--nmc-gold) !important;
 }
 
-/* Remove white background from logo */
+/* Logo styling - remove white background more gently */
 .navbar-brand img,
 .hero-logo,
 .login-logo {
     background: transparent;
     mix-blend-mode: multiply;
-    filter: brightness(0) invert(1);
 }
 
-/* Special styling for logo in hero section */
-.hero-logo {
-    filter: brightness(0) invert(1) !important;
-}
-
-/* Logo in login page */
+/* Make logo darker elements visible on dark backgrounds */
+.hero-logo,
 .login-logo {
-    filter: brightness(0) invert(1) !important;
+    filter: brightness(1.2) contrast(1.1);
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 8px;
 }
 
 [data-bs-theme="dark"] .card {
